@@ -1,25 +1,25 @@
-const Task = require('../models/Task');
+import Task from '../models/Task';
 
-exports.createTask = async (req, res) => {
+export const createTask = async (req: any, res: any) => {
   try {
     const task = await Task.create({ ...req.body, userId: req.user.id });
     res.status(201).json(task);
-  } catch (err) {
+  } catch (err: any) {
     res.status(500).json({ error: err.message });
   }
 };
 
-exports.getAllTasks = async (req, res) => {
+export const getAllTasks = async (req: any, res: any) => {
   const tasks = await Task.find({ userId: req.user.id });
   res.json(tasks);
 };
 
-exports.getTaskById = async (req, res) => {
+export const getTaskById = async (req: any, res: any) => {
   const task = await Task.findOne({ _id: req.params.id, userId: req.user.id });
   res.json(task);
 };
 
-exports.updateTask = async (req, res) => {
+export const updateTask = async (req: any, res: any) => {
   const updated = await Task.findOneAndUpdate(
     { _id: req.params.id, userId: req.user.id },
     req.body,
@@ -28,7 +28,7 @@ exports.updateTask = async (req, res) => {
   res.json(updated);
 };
 
-exports.deleteTask = async (req, res) => {
+export const deleteTask = async (req: any, res: any) => {
   await Task.findOneAndDelete({ _id: req.params.id, userId: req.user.id });
   res.json({ message: 'Task deleted' });
 };

@@ -1,13 +1,14 @@
-const express = require('express');
-const router = express.Router();
-const auth = require('../middleware/authMiddleware');
-const {
+import express from 'express';
+import { auth } from '../middleware/authMiddleware';
+import {
   createTask,
   getAllTasks,
   updateTask,
   deleteTask,
   getTaskById
-} = require('../controllers/taskController');
+} from '../controllers/taskController';
+
+const router: express.Router = express.Router();
 
 router.post('/', auth, createTask);
 router.get('/', auth, getAllTasks);
@@ -15,5 +16,5 @@ router.get('/:id', auth, getTaskById);
 router.put('/:id', auth, updateTask);
 router.delete('/:id', auth, deleteTask);
 
-module.exports = router;
+export default router;
 

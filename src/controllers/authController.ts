@@ -1,17 +1,17 @@
-const User = require('../models/User');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+import User from '../models/User';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
-exports.getUser = async (req, res) => {
+export const getUser = async (req: any, res: any) => {
   try {
     const user = await User.findById(req.user.id);
     res.json(user);
-  } catch (err) {
+  } catch (err: any) {
     res.status(500).json({ error: err.message });
   }
 };
 
-exports.register = async (req, res) => {
+export const register = async (req: any, res: any) => {
   const { email, password } = req.body;
 
   try {
@@ -21,12 +21,12 @@ exports.register = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await User.create({ email, password: hashedPassword });
     res.status(201).json({ message: 'User registered' });
-  } catch (err) {
+  } catch (err: any) {
     res.status(500).json({ error: err.message });
   }
 };
 
-exports.login = async (req, res) => {
+export const login = async (req: any, res: any) => {
   const { email, password } = req.body;
 
   try {
@@ -39,25 +39,25 @@ exports.login = async (req, res) => {
     if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
 
     // Generate token and send it in response
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET as string, { expiresIn: '1h' });
     res.json({ token });
-  } catch (err) {
+  } catch (err: any) {
     res.status(500).json({ error: err.message });
   }
 };
 
-exports.logout = async (req, res) => {
+export const logout = async (req: any, res: any) => {
   // Clear token from response
   res.clearCookie('token');
   res.json({ message: 'Logged out' });
 };
 
-exports.deleteUser = async (req, res) => {
+export const deleteUser = async (req: any, res: any) => {
   try {
     // Delete user by user id
     await User.findByIdAndDelete(req.user.id);
     res.json({ message: 'User deleted' });
-  } catch (err) {
+  } catch (err: any) {
     res.status(500).json({ error: err.message });
   }
 };
