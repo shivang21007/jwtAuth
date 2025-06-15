@@ -1,11 +1,12 @@
 import jwt from 'jsonwebtoken';
+import { env } from '../env/env';
 
 export const auth = (req: any, res: any, next: any) => {
   const token = req.header('Authorization')?.split(' ')[1];
   if (!token) return res.status(401).json({ message: 'Access denied' });
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
+    const decoded = jwt.verify(token, env.JWT_SECRET as string);
     req.user = decoded; // { id: userId }
     next();
   } catch (err: any) {

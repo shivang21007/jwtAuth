@@ -1,26 +1,26 @@
 import express from 'express';
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes';
 import taskRoutes from './routes/taskRoutes';
-
-dotenv.config();
+import { connectDB } from './db/mongodb';
+import { env } from './env/env';
 
 const app = express();
 app.use(express.json());
 
-mongoose.connect(process.env.MONGO_URI as string)
-  .then(() => console.log("MongoDB connected"))
-  .catch((err: any) => console.log("Mongo Error:", err));
+connectDB();
 
 app.get('/', (req, res) => {
   res.send('JWT CRUD API is running 🚀');
 });
 
+app.get('/health', (req, res) => {
+  res.status(200).json({ message: 'Server is healthy 🚀' });
+});
+
 app.use('/api/auth', authRoutes);
 app.use('/api/tasks', taskRoutes);
 
-app.listen(process.env.PORT, () => {
-  console.log(`Server running on port ${process.env.PORT}`);
+app.listen(env.PORT, () => {
+  console.log(`Server running on port ${env.PORT} ... 🚀`);
 });
 
